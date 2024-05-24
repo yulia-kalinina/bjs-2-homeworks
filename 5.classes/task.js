@@ -101,36 +101,40 @@ class Student {
 
   addMark(mark, subjectName) {
     if (mark < 2 || mark > 5) {
-      return;
-    }
-
-    if (!this.marks.includes(subjectName)) {
-      this.marks.subjectName = [];
-    }
-
-    if (this.marks.subjectName !== undefined) {
-      this.marks.subjectName.push(mark);
-    }
-  }
-
-  getAverageBySubject(subjectName) {
-    if (!this.marks.includes(subjectName)) {
       return 0;
     }
 
-    if (this.marks.subjectName !== undefined) {
-      let sum = this.marks.subjectName.reduce((acc, item) => acc + item, 0);
-      return sum / this.marks.subjectName.length;
+    if (this.marks["subjectName"] === undefined) {
+      this.marks["subjectName"] = [];
     }
+
+    this.marks["subjectName"].push(mark);
+  }
+
+  getAverageBySubject(subjectName) {
+    if (this.marks["subjectName"] === undefined) {
+      return 0;
+    }
+
+    if (this.marks["subjectName"].length === 0) {
+      return 0;
+    }
+
+    let sum = this.marks["subjectName"].reduce((acc, item) => acc + item, 0);
+    return sum / this.marks["subjectName"].length;
   }
 
   getAverage() {
+    if (this.marks === undefined) {
+      return 0;
+    }
+
     let allSubjects = Object.keys(this.marks);
     let sumOfAverageMarks = 0;
     for (let i = 0; i < allSubjects.length; i++) {
-      sumOfAverageMarks =
-        getAverageBySubject(allSubjects[i]) + sumOfAverageMarks;
+      sumOfAverageMarks += getAverageBySubject(allSubjects[i]);
+      return sumOfAverageMarks / allSubjects.length;
     }
-    return sumOfAverageMarks / allSubjects.length;
+    return 0;
   }
 }
