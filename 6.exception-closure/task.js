@@ -19,11 +19,7 @@ class Triangle {
     this.a = a;
     this.b = b;
     this.c = c;
-    if (
-      this.a + this.b < this.c ||
-      this.b + this.c < this.a ||
-      this.a + this.c < this.b
-    ) {
+    if (a + b < c || b + c < a || a + c < b) {
       throw new Error("Треугольник с такими сторонами не существует");
     }
   }
@@ -33,9 +29,9 @@ class Triangle {
   }
 
   get area() {
-    let p = (this.a + this.b + this.c) / 2;   // не знаю как здесь правильно обратиться к результату предыдущего геттера
+    let p = this.perimeter / 2;
     let square = Math.sqrt(p * (p - this.a) * (p - this.b) * (p - this.c));
-    return square.toFixed(3);
+    return Number(square.toFixed(3));
   }
 }
 
@@ -43,13 +39,13 @@ function getTriangle(a, b, c) {
   try {
     return new Triangle(a, b, c);
   } catch (error) {
-    let newTriangle = new Triangle(a, b, c);
-    newTriangle.get perimeter() = function() {       //Здесь не понимаю как обратиться к геттеру объекта, ведь он из двух слов
-      return "Ошибка! Треугольник не существует";
-    }
-    newTriangle.get area() = function() {
-      return "Ошибка! Треугольник не существует";
-    }
-    return newTriangle;
+    return {
+      get perimeter() {
+        return "Ошибка! Треугольник не существует";
+      },
+      get area() {
+        return "Ошибка! Треугольник не существует";
+      },
+    };
   }
 }
