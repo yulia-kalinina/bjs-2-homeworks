@@ -130,10 +130,15 @@ class Student {
     }
     let allSubjects = Object.keys(this.marks);
     let sumOfAverageMarks = 0;
+
+    if (allSubjects.length === 0) {
+      return 0;
+    }
+
     for (let i = 0; i < allSubjects.length; i++) {
       sumOfAverageMarks += this.getAverageBySubject(allSubjects[i]);
-      return sumOfAverageMarks / allSubjects.length;
     }
-    return 0;
+
+    return sumOfAverageMarks / allSubjects.length;
   }
 }
