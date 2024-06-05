@@ -9,41 +9,29 @@ class AlarmClock {
       throw new Error("Отсутствуют обязательные аргументы");
     }
 
-    let allValues = Object.values(this.alarmCollection);
-    for (let i = 0; i < allValues.length; i++) {
-      if (allValues[i] === time) {
-        console.warn("Уже присутствует звонок на это же время");
-      }
-    }
-
-    for (let i = 0; i < this.alarmCollection.length; i++) {
-      if ("canCall" in this.alarmCollection[i]) {
-        this.alarmCollection[i].canCall = true;
-      }
+    if (this.alarmCollection.some((element) => element.time === time)) {
+      console.warn("Уже присутствует звонок на это же время");
     }
 
     this.alarmCollection.push({
       callback: callback,
       time: time,
-      canCall: callback(),
+      canCall: true,
     });
   }
 
   removeClock(time) {
-    if (time === undefined) {
-      throw new Error("Отсутствуют обязательные аргументы");
-    }
-
     this.alarmCollection = this.alarmCollection.filter(
-      (alarm) => alarm[time] !== time
+      (alarm) => alarm.time !== time
     );
   }
 
   getCurrentFormattedTime() {
-    let today = new Date();
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let formattedTime = hours + ":" + minutes;
+    let formattedTime = new Date().toLocaleTimeString("ru-Ru", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
     return formattedTime;
   }
 
@@ -52,10 +40,10 @@ class AlarmClock {
       return;
     }
 
-    let resultOfInterval = setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.alarmCollection.forEach((element) => {
         if (
-          element[time] === this.getCurrentFormattedTime() &&
+          element.time === this.getCurrentFormattedTime() &&
           element.canCall === true
         ) {
           element.canCall = false;
@@ -63,13 +51,11 @@ class AlarmClock {
         }
       });
     }, 1000);
-
-    this.intervalId = resultOfInterval;
   }
 
   stop() {
-    clearInterval(intervalId);
-    intervalId = null;
+    clearInterval(this.intervalId);
+    this.intervalId = null;
   }
 
   resetAllCalls() {
@@ -79,7 +65,7 @@ class AlarmClock {
   }
 
   clearAlarms() {
-    stop();
+    this.stop();
     this.alarmCollection = [];
   }
 }
